@@ -1,0 +1,39 @@
+# in configuration.yaml:
+# mqtt: !include sol.yaml
+# in sol.yaml inhalt:
+sensor:
+  - name: "SolMateInjectPower"
+    unique_id: "solinjectpower"
+    state_topic: "eet/solmate/0/inject_power"
+    suggested_display_precision: 0
+    unit_of_measurement: "W"
+    device_class: "energy"
+    state_class: "measurement"
+  - name: "SolMateTemperature"
+    unique_id: "soltemp"
+    state_topic: "eet/solmate/0/temperature"
+    suggested_display_precision: 1
+    unit_of_measurement: "°C"
+    device_class: "energy"
+    state_class: "measurement"
+  - name: "SolMateBattery"
+    unique_id: "solbatterystate"
+    state_topic: "eet/solmate/0/battery_state"
+    suggested_display_precision: 2
+    unit_of_measurement: "%"
+    device_class: "energy"
+    state_class: "measurement"
+  - name: "SolMatePVPower"
+    unique_id: "solpvpower"
+    state_topic: "eet/solmate/0/pv_power"
+    suggested_display_precision: 0
+    unit_of_measurement: "%"
+    device_class: "energy"
+    state_class: "measurement"
+  - name: "SolBattery_flow"
+    unique_id: "solpvpower"
+    state_topic: "eet/solmate/0/battery_flow"
+    suggested_display_precision: 2
+    unit_of_measurement: "%"
+    device_class: "energy"
+    state_class: "measurement"
