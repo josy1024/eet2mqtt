@@ -1,0 +1,16 @@
+# energy dashboard
+
+* http://homeassistant.local:8123/config/energy/dashboard
+
+#### SNIP HERE
+sensor:
+  - platform: integration
+    source: sensor.solmatepvpower
+    name: SolPVEnergie
+    unit_prefix: k
+    round: 2
+  - platform: integration
+    source: sensor.solinjectpower
+    name: SolEinspeiseEnergie
+    unit_prefix: k
+    round: 2

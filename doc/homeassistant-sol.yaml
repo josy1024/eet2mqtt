@@ -14,7 +14,7 @@ sensor:
     state_topic: "eet/solmate/0/temperature"
     suggested_display_precision: 1
     unit_of_measurement: "°C"
-    device_class: "energy"
+    device_class: "temperature"
     state_class: "measurement"
   - name: "SolMateBattery"
     unique_id: "solbatterystate"
@@ -27,13 +27,13 @@ sensor:
     unique_id: "solpvpower"
     state_topic: "eet/solmate/0/pv_power"
     suggested_display_precision: 0
-    unit_of_measurement: "%"
+    unit_of_measurement: "W"
     device_class: "energy"
     state_class: "measurement"
   - name: "SolBattery_flow"
     unique_id: "solpvpower"
     state_topic: "eet/solmate/0/battery_flow"
     suggested_display_precision: 2
-    unit_of_measurement: "%"
+    unit_of_measurement: "W"
     device_class: "energy"
     state_class: "measurement"
