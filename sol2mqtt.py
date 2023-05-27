@@ -40,17 +40,25 @@ mqttport = config['mqttbrokerport']  # 1883 ist der Standard Port
 mqttuser = config['mqttbrokeruser']
 mqttpasswort = config['mqttbrokerpasswort']
 
+print("Connect SolmateAPI SN:" + sn)
+
 client = solmate_sdk.SolMateAPIClient(sn)
 client.quickstart()
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
 
+print("Connected with result code " + str(rc))
+
+
+print("Connect mqtt: " + mqttBroker)
 
 mqttClient = mqtt.Client()
 mqttClient.on_connect = on_connect
 mqttClient.username_pw_set(mqttuser, mqttpasswort)
 mqttClient.connect(mqttBroker, mqttport, 60)
+
+
 
 n = sdnotify.SystemdNotifier()
 n.notify("READY=1")
