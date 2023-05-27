@@ -31,7 +31,7 @@ sensor:
     device_class: "energy"
     state_class: "measurement"
   - name: "SolBattery_flow"
-    unique_id: "solpvpower"
+    unique_id: "solbatteryflow"
     state_topic: "eet/solmate/0/battery_flow"
     suggested_display_precision: 2
     unit_of_measurement: "W"
