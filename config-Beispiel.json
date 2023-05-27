@@ -1,0 +1,7 @@
+{
+    "sn": "S1....nr",
+    "mqttbrokerip": "192.168.0.100",
+    "mqttbrokerport": 1833,
+    "mqttbrokeruser": "",
+    "mqttbrokerpasswort": ""
+}
