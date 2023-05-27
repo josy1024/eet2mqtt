@@ -48,7 +48,7 @@ client.quickstart()
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
 
-print("Connect mqtt: " + mqttBroker ":" + mqttport )
+print("Connect mqtt: " + mqttBroker + ":" + mqttport )
 
 try:
     mqttClient = mqtt.Client("sol2mqtt")
