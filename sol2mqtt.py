@@ -48,7 +48,7 @@ client.quickstart()
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
 
-print("Connect mqtt: " + mqttBroker)
+print("Connect mqtt: " + mqttBroker ":" + mqttport )
 
 try:
     mqttClient = mqtt.Client("sol2mqtt")
@@ -56,13 +56,11 @@ try:
     mqttClient.username_pw_set(mqttuser, mqttpasswort)
     mqttClient.connect(mqttBroker, mqttport, 60)
 except:
-    mqttClient.connect(mqttBroker, mqttport, 60)
     print("Die Ip Adresse des Brokers ist falsch?" + mqttBroker + ":" + mqttport )
     sys.exit()
 
 
         
-
 
 n = sdnotify.SystemdNotifier()
 n.notify("READY=1")
