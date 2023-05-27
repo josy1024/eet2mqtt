@@ -35,9 +35,6 @@ for conf in neededConfig:
 # solmate serial number
 sn = config['sn']
 
-# Aktulle Werte auf Console ausgeben (True | False)
-printValue = config['printValue']
-
 mqttBroker = config['mqttbrokerip']
 mqttport = config['mqttbrokerport']  # 1883 ist der Standard Port
 mqttuser = config['mqttbrokeruser']
