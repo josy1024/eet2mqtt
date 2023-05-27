@@ -80,7 +80,7 @@ while True:
     try:
         live_values = client.get_live_values()
         online = client.check_online()
-        mqttClient.publish(f"eet/solmate/{client.serialnum}/live_values", json.dumps(live_values), 1)
+        # mqttClient.publish(f"eet/solmate/{client.serialnum}/live_values", json.dumps(live_values), 1)
         # mqttClient.publish(f"eet/solmate/{client.serialnum}/online", online, 1)
         for property_name in live_values.keys():
             mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", live_values[property_name], 1)                
