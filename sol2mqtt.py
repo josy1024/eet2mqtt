@@ -90,6 +90,10 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/battery_in", battery_in, 1)                
         mqttClient.publish(f"eet/solmate/{mqttid}/battery_out", battery_out, 1)                
 
+        injectsettings = client.get_injection_settings()
+        #         
+        
+        mqttClient.publish(f"eet/solmate/{mqttid}/injectsettings ", injectsettings , 1)                
         n.notify("WATCHDOG=1")
     except Exception as exc:
         print(exc)
