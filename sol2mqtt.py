@@ -84,6 +84,12 @@ while True:
         # mqttClient.publish(f"eet/solmate/{client.serialnum}/online", online, 1)
         for property_name in live_values.keys():
             mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", live_values[property_name], 1)                
+        
+        battery_in = max(float(live_values['battery_flow']),0)
+        battery_out = - min(float(live_values['battery_flow']),0)
+        mqttClient.publish(f"eet/solmate/{mqttid}/battery_in", battery_in, 1)                
+        mqttClient.publish(f"eet/solmate/{mqttid}/battery_out", battery_out, 1)                
+
         n.notify("WATCHDOG=1")
     except Exception as exc:
         print(exc)
