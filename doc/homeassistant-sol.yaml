@@ -37,3 +37,17 @@ sensor:
     unit_of_measurement: "W"
     device_class: "energy"
     state_class: "measurement"
+  - name: "SolBattery_Laden"
+    unique_id: "solbatteryin"
+    state_topic: "eet/solmate/0/battery_in"
+    suggested_display_precision: 1
+    unit_of_measurement: "W"
+    device_class: "energy"
+    state_class: "measurement"
+  - name: "SolBattery_Liefern"
+    unique_id: "solbatteryout"
+    state_topic: "eet/solmate/0/battery_out"
+    suggested_display_precision: 1
+    unit_of_measurement: "W"
+    device_class: "energy"
+    state_class: "measurement"
