@@ -9,7 +9,7 @@ import sdnotify
 import json
 
 import queue
-import threading
+#import threading
 
 # Create a queue object to hold the received variables
 message_queue = queue.Queue()
@@ -76,13 +76,11 @@ def on_message(mqttClient, userdata, msg):
     message_queue.put((msg.topic, received_message))  # Add the variables to the queue
 
 def process_messages():
-    solclient = solmate_sdk.SolMateAPIClient(sn)
-    solclient.quickstart()
     while True:
         topic, received_message = message_queue.get()  # Retrieve variables from the queue
         solsetter(solclient, topic, received_message)  # Cal
 
-def solsetter(solclient, topic, received_message):
+def solsetter(topic, received_message):
     print(f"solsetter: Received message on topic {topic}: {received_message}")
     if "user_maximum_injection" in topic:
         solclient.set_max_injection(int(received_message))
@@ -112,8 +110,8 @@ n = sdnotify.SystemdNotifier()
 n.notify("READY=1")
 
 # Create a thread for processing the messages from the queue
-message_thread = threading.Thread(target=process_messages)
-message_thread.start()
+# message_thread = threading.Thread(target=process_messages)
+# message_thread.start()
 
 while True:
     print(".", end="", flush=True)
@@ -149,5 +147,6 @@ while True:
         print("Exception:", type(exc).__name__)
         print(str(exc))
     sleep(10)
+    process_messages
     mqttClient.loop(0.1)
     
