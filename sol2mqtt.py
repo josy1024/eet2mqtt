@@ -63,6 +63,8 @@ try:
 
 except:
     print("Die Ip Adresse des Brokers ist falsch?" + mqttBroker + ":" +  str(mqttport) )
+    print("Exception:", type(exc).__name__)
+    print(str(exc))
     sys.exit()
 
 
