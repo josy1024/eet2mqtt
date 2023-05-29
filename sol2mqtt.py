@@ -72,12 +72,11 @@ def on_connect(mqttClient, userdata, flags, rc):
 def on_message(mqttClient, userdata, msg):
     received_message = msg.payload.decode("utf-8")
     print(f"on_message: Received message on topic {msg.topic}: {received_message}")
-#    solsetter(msg.topic, received_message)
     message_queue.put((msg.topic, received_message))  # Add the variables to the queue
 
 
-def solsetter(topic, received_message):
-    print(f"solsetter: Received message on topic {topic}: {received_message}")
+def mqtt2sol(topic, received_message):
+    print(f"mqtt2sol: Received message on topic {topic}: {received_message}")
     if "user_maximum_injection" in topic:
         solclient.set_max_injection(int(received_message))
     elif "user_minimum_injection" in topic:
@@ -141,7 +140,8 @@ while True:
 
         while not message_queue.empty():
             topic, received_message = message_queue.get()  # Retrieve variables from the queue
-            solsetter(topic, received_message)  # Call solsetter with the retrieved variables
+            mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
+            sleep(0.1)
 
         n.notify("WATCHDOG=1")
     except Exception as exc:
