@@ -70,15 +70,16 @@ def on_connect(mqttClient, userdata, flags, rc):
 def on_message(mqttClient, userdata, msg):
     received_message = msg.payload.decode("utf-8")
     print(f"on_message: Received message on topic {msg.topic}: {received_message}")
-    solsetter(msg.payload.decode())
+    solsetter(msg.topic, received_message)
 
-def solsetter(msg):
+def solsetter(topic, received_message):
+    print(f"on_message: Received message on topic {topic}: {received_message}")
     global solclient
-    if "user_maximum_injection" in msg.topic:
+    if "user_maximum_injection" in topic:
         solclient.set_max_injection(int(received_message))
-    elif "user_minimum_injection" in msg.topic:
+    elif "user_minimum_injection" in topic:
         solclient.set_min_injection(int(received_message))
-    elif "user_minimum_battery_percentage" in msg.topic:
+    elif "user_minimum_battery_percentage" in topic:
         solclient.set_user_minimum_battery_percentage(int(received_message))
 
 try:
