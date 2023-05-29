@@ -61,7 +61,8 @@ def on_connect(mqttClient, userdata, flags, rc):
         time.sleep(5)
         mqttClient.connect(broker_address, broker_port)
                 
-def on_message(client, userdata, msg):
+def on_message(mqttClient, userdata, msg):
+    global solcient
     received_message = msg.payload.decode("utf-8")
     print(f"Received message on topic {msg.topic}: {received_message}")
     if "user_maximum_injection" in msg.topic:
