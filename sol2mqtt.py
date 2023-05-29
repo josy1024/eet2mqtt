@@ -45,7 +45,7 @@ print("Connect SolmateAPI SN:" + sn)
 solclient = solmate_sdk.SolMateAPIClient(sn)
 solclient.quickstart()
 mqttid = solclient.serialnum
-mqttid = 0
+mqttid = "0"
     
 subscribe_topics = ["eet/solmate/{mqttid}/set/user_maximum_injection", "eet/solmate/{mqttid}/set/user_minimum_injection", "eet/solmate/{mqttid}/set/user_minimum_battery_percentage"]
 
