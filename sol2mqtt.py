@@ -61,7 +61,7 @@ try:
         print("  Subscribe: " + topic)
         mqttClient.subscribe(topic)
 
-except:
+except Exception as exc:
     print("Die Ip Adresse des Brokers ist falsch?" + mqttBroker + ":" +  str(mqttport) )
     print("Exception:", type(exc).__name__)
     print(str(exc))
