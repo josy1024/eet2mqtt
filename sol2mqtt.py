@@ -44,9 +44,32 @@ print("Connect SolmateAPI SN:" + sn)
 
 client = solmate_sdk.SolMateAPIClient(sn)
 client.quickstart()
+mqttid = client.serialnum
+mqttid = 0
+    
+subscribe_topics = ["eet/solmate/{mqttid}/set/user_maximum_injection", "eet/solmate/{mqttid}/set/user_minimum_injection", "eet/solmate/{mqttid}/set/user_minimum_battery_percentage"]
 
+    # Callback function for when the client receives a CONNACK response from the broker
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
+    if rc == 0:
+        print("Connected to MQTT broker")
+        for topic in subscribe_topics:
+            client.subscribe(topic)
+    else:
+        print("Connection to MQTT broker failed. Retrying in 5 seconds...")
+        time.sleep(5)
+        client.connect(broker_address, broker_port)
+                
+def on_message(client, userdata, msg):
+    received_message = msg.payload.decode("utf-8")
+    print(f"Received message on topic {msg.topic}: {received_message}")
+    if "user_maximum_injection" in msg.topic:
+        client.set_max_injection(int(received_message))
+    elif "user_minimum_injection" in msg.topic:
+        client.set_min_injection(int(received_message))
+    elif "user_minimum_battery_percentage" in msg.topic:
+        client.set_user_minimum_battery_percentage(int(received_message))
 
 print("Connect mqtt: " + mqttBroker + ":" + str(mqttport) )
 
@@ -55,19 +78,19 @@ try:
     mqttClient.on_connect = on_connect
     mqttClient.username_pw_set(mqttuser, mqttpasswort)
     mqttClient.connect(mqttBroker, mqttport, 60)
+    mqttClient.on_message = on_message
 except:
     print("Die Ip Adresse des Brokers ist falsch?" + mqttBroker + ":" +  str(mqttport) )
     sys.exit()
 
 
-        
+
+
+
 
 n = sdnotify.SystemdNotifier()
 n.notify("READY=1")
 
-
-mqttid = client.serialnum
-mqttid = 0
 while True:
     print(".", end="", flush=True)
     connected = False
@@ -93,6 +116,10 @@ while True:
         injectsettings = client.get_injection_settings()
         injectsettings_string = json.dumps(injectsettings)
         mqttClient.publish(f"eet/solmate/{mqttid}/injectsettings ", injectsettings_string , 1)                
+        mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_injection", injectsetting.user_minimum_injection , 1)          
+        mqttClient.publish(f"eet/solmate/{mqttid}/user_maximum_injection", injectsetting.user_maximum_injection , 1)          
+        mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsetting.user_minimum_battery_percentage , 1)          
+        #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
         n.notify("WATCHDOG=1")
     except Exception as exc:
         print(exc)
