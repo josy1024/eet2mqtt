@@ -73,7 +73,7 @@ def on_message(mqttClient, userdata, msg):
     solsetter(msg.topic, received_message)
 
 def solsetter(topic, received_message):
-    print(f"on_message: Received message on topic {topic}: {received_message}")
+    print(f"solsetter: Received message on topic {topic}: {received_message}")
     global solclient
     if "user_maximum_injection" in topic:
         solclient.set_max_injection(int(received_message))
