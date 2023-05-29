@@ -50,19 +50,19 @@ mqttid = 0
 subscribe_topics = ["eet/solmate/{mqttid}/set/user_maximum_injection", "eet/solmate/{mqttid}/set/user_minimum_injection", "eet/solmate/{mqttid}/set/user_minimum_battery_percentage"]
 
     # Callback function for when the client receives a CONNACK response from the broker
-def on_connect(client, userdata, flags, rc):
+def on_connect(mqttClient, userdata, flags, rc):
     print("on_connect with result code " + str(rc))
     if rc == 0:
         print("Connected to MQTT broker")
         for topic in subscribe_topics:
             print("  Subscribe: " + topic)
-            client.subscribe(topic)
+            mqttClient.subscribe(topic)
     else:
         print("Connection to MQTT broker failed. Retrying in 5 seconds...")
         time.sleep(5)
         client.connect(broker_address, broker_port)
                 
-def on_message(client, userdata, msg):
+def on_message(mqttClient, userdata, msg):
     global solclient
     received_message = msg.payload.decode("utf-8")
     print(f"on_message: Received message on topic {msg.topic}: {received_message}")
