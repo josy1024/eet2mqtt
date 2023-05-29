@@ -75,10 +75,6 @@ def on_message(mqttClient, userdata, msg):
 #    solsetter(msg.topic, received_message)
     message_queue.put((msg.topic, received_message))  # Add the variables to the queue
 
-def process_messages():
-    while True:
-        topic, received_message = message_queue.get()  # Retrieve variables from the queue
-        solsetter(solclient, topic, received_message)  # Cal
 
 def solsetter(topic, received_message):
     print(f"solsetter: Received message on topic {topic}: {received_message}")
@@ -142,11 +138,15 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/user_maximum_injection", injectsettings['user_maximum_injection'] , 1)          
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
+
+        while not message_queue.empty():
+        topic, received_message = message_queue.get()  # Retrieve variables from the queue
+        solsetter(topic, received_message)  # Call solsetter with the retrieved variables
+
         n.notify("WATCHDOG=1")
     except Exception as exc:
         print("Exception:", type(exc).__name__)
         print(str(exc))
     sleep(10)
-    process_messages
     mqttClient.loop(0.1)
     
