@@ -119,6 +119,12 @@ while True:
             time.sleep(2)
     try:
         live_values = solclient.get_live_values()
+
+        while not message_queue.empty():
+            topic, received_message = message_queue.get()  # Retrieve variables from the queue
+            mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
+            sleep(0.1)
+
         online = solclient.check_online()
         # mqttClient.publish(f"eet/solmate/{client.serialnum}/live_values", json.dumps(live_values), 1)
         mqttClient.publish(f"eet/solmate/{mqttid}/online", online, 1)
@@ -137,11 +143,6 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/user_maximum_injection", injectsettings['user_maximum_injection'] , 1)          
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
-
-        while not message_queue.empty():
-            topic, received_message = message_queue.get()  # Retrieve variables from the queue
-            mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
-            sleep(0.1)
 
         n.notify("WATCHDOG=1")
     except Exception as exc:
