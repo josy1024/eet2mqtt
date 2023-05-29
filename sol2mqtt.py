@@ -49,16 +49,28 @@ mqttid = 0
     
 subscribe_topics = ["eet/solmate/{mqttid}/set/user_maximum_injection", "eet/solmate/{mqttid}/set/user_minimum_injection", "eet/solmate/{mqttid}/set/user_minimum_battery_percentage"]
 
-mqttClient = Nothing
+
+try:
+    print("Connect mqtt: " + mqttBroker + ":" + str(mqttport) )
+    mqttClient = mqtt.Client("sol2mqtt")
+    mqttClient.on_connect = on_connect
+    mqttClient.on_message = on_message
+    mqttClient.username_pw_set(mqttuser, mqttpasswort)
+    mqttClient.connect(mqttBroker, mqttport, 60)
+    for topic in subscribe_topics:
+        print("  Subscribe: " + topic)
+        mqttClient.subscribe(topic)
+
+except:
+    print("Die Ip Adresse des Brokers ist falsch?" + mqttBroker + ":" +  str(mqttport) )
+    sys.exit()
+
+
     # Callback function for when the client receives a CONNACK response from the broker
-def on_connect(Client, userdata, flags, rc):
-    global mqttClient
-    print("on_connect with result code " + str(rc))
+def on_connect(mqttClient, userdata, flags, rc):
+    print("on_connect: with result code " + str(rc))
     if rc == 0:
         print("Connected to MQTT broker")
-        for topic in subscribe_topics:
-            print("  Subscribe: " + topic)
-            mqttClient.subscribe(topic)
     else:
         print("Connection to MQTT broker failed. Retrying in 5 seconds...")
         time.sleep(5)
@@ -75,17 +87,6 @@ def on_message(Client, userdata, msg):
     elif "user_minimum_battery_percentage" in msg.topic:
         solclient.set_user_minimum_battery_percentage(int(received_message))
 
-
-try:
-    print("Connect mqtt: " + mqttBroker + ":" + str(mqttport) )
-    mqttClient = mqtt.Client("sol2mqtt")
-    mqttClient.on_connect = on_connect
-    mqttClient.on_message = on_message
-    mqttClient.username_pw_set(mqttuser, mqttpasswort)
-    mqttClient.connect(mqttBroker, mqttport, 60)
-except:
-    print("Die Ip Adresse des Brokers ist falsch?" + mqttBroker + ":" +  str(mqttport) )
-    sys.exit()
 
 
 
