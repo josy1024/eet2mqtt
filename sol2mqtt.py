@@ -130,5 +130,5 @@ while True:
     except Exception as exc:
         print("Exception:", type(exc).__name__)
         print(str(exc))
-    sleep(10)
-
+    mqttClient.loop(10)
+    
