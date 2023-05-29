@@ -55,7 +55,7 @@ def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to MQTT broker")
         for topic in subscribe_topics:
-            print("  Subscribe: " + )
+            print("  Subscribe: " + topic)
             client.subscribe(topic)
     else:
         print("Connection to MQTT broker failed. Retrying in 5 seconds...")
