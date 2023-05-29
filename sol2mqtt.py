@@ -140,8 +140,8 @@ while True:
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
 
         while not message_queue.empty():
-        topic, received_message = message_queue.get()  # Retrieve variables from the queue
-        solsetter(topic, received_message)  # Call solsetter with the retrieved variables
+            topic, received_message = message_queue.get()  # Retrieve variables from the queue
+            solsetter(topic, received_message)  # Call solsetter with the retrieved variables
 
         n.notify("WATCHDOG=1")
     except Exception as exc:
