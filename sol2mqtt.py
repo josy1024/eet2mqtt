@@ -8,6 +8,10 @@ import solmate_sdk
 import sdnotify
 import json
 
+import queue
+
+sync_queue = queue.Queue()
+
 configFile = os.path.dirname(os.path.realpath(__file__)) + '/config.json'
 
 # Überprüfung ob ein Config Datei vorhanden ist sonst kommt eine Fehlermeldung und beendet das Programm
@@ -64,16 +68,18 @@ def on_connect(mqttClient, userdata, flags, rc):
         mqttClient.connect(broker_address, broker_port)
                 
 def on_message(mqttClient, userdata, msg):
-    global solclient
     received_message = msg.payload.decode("utf-8")
     print(f"on_message: Received message on topic {msg.topic}: {received_message}")
+    solsetter(msg.payload.decode())
+
+def solsetter(msg)
+    global solclient
     if "user_maximum_injection" in msg.topic:
         solclient.set_max_injection(int(received_message))
     elif "user_minimum_injection" in msg.topic:
         solclient.set_min_injection(int(received_message))
     elif "user_minimum_battery_percentage" in msg.topic:
         solclient.set_user_minimum_battery_percentage(int(received_message))
-
 
 try:
     print("Connect mqtt: " + mqttBroker + ":" + str(mqttport) )
