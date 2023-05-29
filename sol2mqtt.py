@@ -47,7 +47,7 @@ solclient.quickstart()
 mqttid = solclient.serialnum
 mqttid = "0"
     
-subscribe_topics = ["eet/solmate/{mqttid}/set/user_maximum_injection", "eet/solmate/{mqttid}/set/user_minimum_injection", "eet/solmate/{mqttid}/set/user_minimum_battery_percentage"]
+subscribe_topics = ["eet/solmate/0/set/user_maximum_injection", "eet/solmate/0/set/user_minimum_injection", "eet/solmate/0/set/user_minimum_battery_percentage"]
 
 
     # Callback function for when the client receives a CONNACK response from the broker
