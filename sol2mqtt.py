@@ -54,7 +54,10 @@ subscribe_topics = ["eet/solmate/0/set/user_maximum_injection", "eet/solmate/0/s
 def on_connect(mqttClient, userdata, flags, rc):
     print("on_connect: with result code " + str(rc))
     if rc == 0:
-        print("Connected to MQTT broker")
+        print("on_connect: topics..")
+        for topic in subscribe_topics:
+            print("  Subscribe: " + topic)
+            mqttClient.subscribe(topic)
     else:
         print("Connection to MQTT broker failed. Retrying in 5 seconds...")
         time.sleep(5)
@@ -79,9 +82,6 @@ try:
     mqttClient.on_message = on_message
     mqttClient.username_pw_set(mqttuser, mqttpasswort)
     mqttClient.connect(mqttBroker, mqttport, 60)
-    for topic in subscribe_topics:
-        print("  Subscribe: " + topic)
-        mqttClient.subscribe(topic)
     mqttClient.loop_start()
 
 except Exception as exc:
