@@ -62,15 +62,15 @@ def on_connect(mqttClient, userdata, flags, rc):
         mqttClient.connect(broker_address, broker_port)
                 
 def on_message(mqttClient, userdata, msg):
-    global solcient
+    global solclient
     received_message = msg.payload.decode("utf-8")
     print(f"Received message on topic {msg.topic}: {received_message}")
     if "user_maximum_injection" in msg.topic:
-        solcient.set_max_injection(int(received_message))
+        solclient.set_max_injection(int(received_message))
     elif "user_minimum_injection" in msg.topic:
-        solcient.set_min_injection(int(received_message))
+        solclient.set_min_injection(int(received_message))
     elif "user_minimum_battery_percentage" in msg.topic:
-        solcient.set_user_minimum_battery_percentage(int(received_message))
+        solclient.set_user_minimum_battery_percentage(int(received_message))
 
 
 try:
@@ -102,8 +102,8 @@ while True:
         except:
             time.sleep(2)
     try:
-        live_values = solcient.get_live_values()
-        online = solcient.check_online()
+        live_values = solclient.get_live_values()
+        online = solclient.check_online()
         # mqttClient.publish(f"eet/solmate/{client.serialnum}/live_values", json.dumps(live_values), 1)
         mqttClient.publish(f"eet/solmate/{mqttid}/online", online, 1)
         for property_name in live_values.keys():
@@ -114,7 +114,7 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/battery_in", battery_in, 1)                
         mqttClient.publish(f"eet/solmate/{mqttid}/battery_out", battery_out, 1)                
 
-        injectsettings = solcient.get_injection_settings()
+        injectsettings = solclient.get_injection_settings()
         injectsettings_string = json.dumps(injectsettings)
         mqttClient.publish(f"eet/solmate/{mqttid}/injectsettings ", injectsettings_string , 1)                
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_injection", injectsettings['user_minimum_injection'] , 1)          
