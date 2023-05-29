@@ -50,6 +50,28 @@ mqttid = 0
 subscribe_topics = ["eet/solmate/{mqttid}/set/user_maximum_injection", "eet/solmate/{mqttid}/set/user_minimum_injection", "eet/solmate/{mqttid}/set/user_minimum_battery_percentage"]
 
 
+    # Callback function for when the client receives a CONNACK response from the broker
+def on_connect(Client, userdata, flags, rc):
+    print("on_connect: with result code " + str(rc))
+    if rc == 0:
+        print("Connected to MQTT broker")
+    else:
+        print("Connection to MQTT broker failed. Retrying in 5 seconds...")
+        time.sleep(5)
+        Client.connect(broker_address, broker_port)
+                
+def on_message(Client, userdata, msg):
+    global solclient
+    received_message = msg.payload.decode("utf-8")
+    print(f"on_message: Received message on topic {msg.topic}: {received_message}")
+    if "user_maximum_injection" in msg.topic:
+        solclient.set_max_injection(int(received_message))
+    elif "user_minimum_injection" in msg.topic:
+        solclient.set_min_injection(int(received_message))
+    elif "user_minimum_battery_percentage" in msg.topic:
+        solclient.set_user_minimum_battery_percentage(int(received_message))
+
+
 try:
     print("Connect mqtt: " + mqttBroker + ":" + str(mqttport) )
     mqttClient = mqtt.Client("sol2mqtt")
@@ -66,30 +88,6 @@ except Exception as exc:
     print("Exception:", type(exc).__name__)
     print(str(exc))
     sys.exit()
-
-
-    # Callback function for when the client receives a CONNACK response from the broker
-def on_connect(mqttClient, userdata, flags, rc):
-    print("on_connect: with result code " + str(rc))
-    if rc == 0:
-        print("Connected to MQTT broker")
-    else:
-        print("Connection to MQTT broker failed. Retrying in 5 seconds...")
-        time.sleep(5)
-        client.connect(broker_address, broker_port)
-                
-def on_message(Client, userdata, msg):
-    global solclient
-    received_message = msg.payload.decode("utf-8")
-    print(f"on_message: Received message on topic {msg.topic}: {received_message}")
-    if "user_maximum_injection" in msg.topic:
-        solclient.set_max_injection(int(received_message))
-    elif "user_minimum_injection" in msg.topic:
-        solclient.set_min_injection(int(received_message))
-    elif "user_minimum_battery_percentage" in msg.topic:
-        solclient.set_user_minimum_battery_percentage(int(received_message))
-
-
 
 
 
