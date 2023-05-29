@@ -82,6 +82,7 @@ try:
     for topic in subscribe_topics:
         print("  Subscribe: " + topic)
         mqttClient.subscribe(topic)
+    mqttClient.loop_start()
 
 except Exception as exc:
     print("Die Ip Adresse des Brokers ist falsch?" + mqttBroker + ":" +  str(mqttport) )
