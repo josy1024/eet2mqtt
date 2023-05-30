@@ -9,9 +9,16 @@ import sdnotify
 import json
 
 import queue
-#import threading
+from datetime import datetime
 
-# Create a queue object to hold the received variables
+# * gets solmate api life data (sol2mqtt)
+# *   .. and writes them to mqtt
+# * gets set data from queue (queue2sol)
+# *   .. and writes them back to solmate api (mqtt2sol)
+# * gets subscribed mqtt set data (mqtt2queue)
+# *   .. and writes it to a queue
+
+
 message_queue = queue.Queue()
 
 configFile = os.path.dirname(os.path.realpath(__file__)) + '/config.json'
@@ -45,6 +52,8 @@ mqttBroker = config['mqttbrokerip']
 mqttport = config['mqttbrokerport']  # 1883 ist der Standard Port
 mqttuser = config['mqttbrokeruser']
 mqttpasswort = config['mqttbrokerpasswort']
+
+uptime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 print("Connect SolmateAPI SN:" + sn)
 
@@ -121,7 +130,7 @@ while True:
         live_values = solclient.get_live_values()
 
         while not message_queue.empty():
-            topic, received_message = message_queue.get()  # Retrieve variables from the queue
+            topic, received_message = message_queue.get()  # queue2sol: Retrieve variables from the queue
             mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
             sleep(0.1)
 
@@ -137,12 +146,13 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/battery_out", battery_out, 1)                
 
         injectsettings = solclient.get_injection_settings()
-        injectsettings_string = json.dumps(injectsettings)
-        mqttClient.publish(f"eet/solmate/{mqttid}/injectsettings ", injectsettings_string , 1)                
+        # injectsettings_string = json.dumps(injectsettings)
+        # mqttClient.publish(f"eet/solmate/{mqttid}/injectsettings ", injectsettings_string , 1)                
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_injection", injectsettings['user_minimum_injection'] , 1)          
         mqttClient.publish(f"eet/solmate/{mqttid}/user_maximum_injection", injectsettings['user_maximum_injection'] , 1)          
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
+        mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime)
 
         n.notify("WATCHDOG=1")
     except Exception as exc:
