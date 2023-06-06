@@ -91,7 +91,7 @@ def mqtt2sol(topic, received_message):
     elif "user_minimum_injection" in topic:
         solclient.set_min_injection(int(received_message))
     elif "user_minimum_battery_percentage" in topic:
-        solclient.set_user_minimum_battery_percentage(int(received_message))
+        solclient.set_min_battery_percentage(int(received_message))
 
 try:
     print("Connect mqtt: " + mqttBroker + ":" + str(mqttport) )
