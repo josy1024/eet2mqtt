@@ -53,7 +53,9 @@ mqttport = config['mqttbrokerport']  # 1883 ist der Standard Port
 mqttuser = config['mqttbrokeruser']
 mqttpasswort = config['mqttbrokerpasswort']
 
-uptime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#uptime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+uptime = datetime.now().isoformat()
+
 
 print("Connect SolmateAPI SN:" + sn)
 
