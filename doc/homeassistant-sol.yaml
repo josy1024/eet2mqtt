@@ -72,4 +72,13 @@ sensor:
     unit_of_measurement: "%"
     device_class: "energy"
     state_class: "measurement"
-
+  - name: "SolApiUptime"
+    unique_id: "solapiuptime"
+    state_topic: "eet/solmate/0/uptime"
+    unit_of_measurement: ""
+    device_class: timestamp
+  - name: "SolApiLastSeen"
+    unique_id: "solapilastseen"
+    state_topic: "eet/solmate/0/last_seen"
+    unit_of_measurement: ""
+    device_class: timestamp
