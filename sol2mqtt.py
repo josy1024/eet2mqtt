@@ -155,7 +155,7 @@ while True:
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
         mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime)
         current_timestamp = datetime.now(timezone.utc).isoformat()
-        mqttClient.publish("eet/solmate/{mqttid}/last_seen", current_timestamp)
+        mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp)
         
         n.notify("WATCHDOG=1")
     except Exception as exc:
