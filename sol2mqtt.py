@@ -10,6 +10,7 @@ import json
 
 import queue
 from datetime import datetime
+from datetime import timezone
 
 # * gets solmate api life data (sol2mqtt)
 # *   .. and writes them to mqtt
@@ -53,9 +54,7 @@ mqttport = config['mqttbrokerport']  # 1883 ist der Standard Port
 mqttuser = config['mqttbrokeruser']
 mqttpasswort = config['mqttbrokerpasswort']
 
-#uptime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-uptime = datetime.now().isoformat()
-
+uptime = datetime.now(timezone.utc).isoformat()
 
 print("Connect SolmateAPI SN:" + sn)
 
@@ -155,7 +154,9 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
         mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime)
-
+        current_timestamp = datetime.now(timezone.utc).isoformat()
+        mqttClient.publish("eet/solmate/{mqttid}/last_seen", current_timestamp)
+        
         n.notify("WATCHDOG=1")
     except Exception as exc:
         print("Exception:", type(exc).__name__)
