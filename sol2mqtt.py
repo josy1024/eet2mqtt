@@ -62,6 +62,12 @@ solclient = solmate_sdk.SolMateAPIClient(sn)
 solclient.quickstart()
 mqttid = solclient.serialnum
 mqttid = "0"
+
+wifis = solclient.list_wifis()
+
+#sun2plug.local
+print(f"Solmate WIFI: {solclient.serialnum}: {wifis}")
+sleep(0.1)
     
 subscribe_topics = ["eet/solmate/0/set/user_maximum_injection", "eet/solmate/0/set/user_minimum_injection", "eet/solmate/0/set/user_minimum_battery_percentage"]
 
