@@ -63,6 +63,9 @@ solclient.quickstart()
 mqttid = solclient.serialnum
 mqttid = "0"
 
+#client.uri = "ws://sun2plug.local:9124/"
+#client.uri = "ws://sun2plug.local:9124/"
+
 wifis = solclient.list_wifis()
 
 #sun2plug.local
