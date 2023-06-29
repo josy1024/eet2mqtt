@@ -62,9 +62,6 @@ print("Connect SolmateAPI SN:" + sn)
 solclient = solmate_sdk.LocalSolMateAPIClient(sn)
 solclient.uri = "ws://sun2plug.local:9124/"
 
-@retry(10, TimeoutError, 100)  # to handle WLAN switching
-@retry(10, ConnectionClosedError, 30)
-
 solclient.quickstart()
 mqttid = solclient.serialnum
 mqttid = "0"
