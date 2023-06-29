@@ -58,16 +58,17 @@ uptime = datetime.now(timezone.utc).isoformat()
 
 print("Connect SolmateAPI SN:" + sn)
 
-#solclient = solmate_sdk.SolMateAPIClient(sn)
-solclient = solmate_sdk.LocalSolMateAPIClient(sn)
-solclient.uri = "ws://sun2plug.local:9124/"
+solclient = solmate_sdk.SolMateAPIClient(sn)
+
+#solclient = solmate_sdk.LocalSolMateAPIClient(sn)
+#solclient.uri = "ws://sun2plug.local:9124/"
 
 solclient.quickstart()
 mqttid = solclient.serialnum
 mqttid = "0"
 
-
-wifis = solclient.list_wifis()
+wifis = ""
+#wifis = solclient.list_wifis()
 
 #sun2plug.local
 print(f"Solmate WIFI: {solclient.serialnum}: {wifis}")
