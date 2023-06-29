@@ -7,6 +7,8 @@ runnging solmate 2 mqtt as service
 ## operate
 
 sudo systemctl daemon-reload
+sudo systemctl stop eet.service
+sudo systemctl start eet.service
 sudo systemctl restart eet.service
 sudo systemctl status eet.service
 
