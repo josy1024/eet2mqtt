@@ -60,6 +60,10 @@ print("Connect SolmateAPI SN:" + sn)
 
 #solclient = solmate_sdk.SolMateAPIClient(sn)
 
+#bugfix if you want to change SolMateAPIClient to LocalSolMateAPIClient
+# ~/.config/solmate-sdk
+# mv authstore.json authstore-online.json
+
 solclient = solmate_sdk.LocalSolMateAPIClient(sn)
 #solclient.uri = "ws://sun2plug.local:9124/"
 
