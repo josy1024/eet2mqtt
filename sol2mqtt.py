@@ -67,7 +67,7 @@ solclient.quickstart()
 mqttid = solclient.serialnum
 mqttid = "0"
 
-wifis = solclient.list_wifis()
+#wifis = solclient.list_wifis()
 
 #sun2plug.local
 print(f"Solmate WIFI: {solclient.serialnum}: {wifis}")
