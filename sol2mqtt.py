@@ -55,20 +55,19 @@ mqttuser = config['mqttbrokeruser']
 mqttpasswort = config['mqttbrokerpasswort']
 
 uptime = datetime.now(timezone.utc).isoformat()
-
+wifis = ""
 print("Connect SolmateAPI SN:" + sn)
 
-solclient = solmate_sdk.SolMateAPIClient(sn)
+#solclient = solmate_sdk.SolMateAPIClient(sn)
 
-#solclient = solmate_sdk.LocalSolMateAPIClient(sn)
+solclient = solmate_sdk.LocalSolMateAPIClient(sn)
 #solclient.uri = "ws://sun2plug.local:9124/"
 
 solclient.quickstart()
 mqttid = solclient.serialnum
 mqttid = "0"
 
-wifis = ""
-#wifis = solclient.list_wifis()
+wifis = solclient.list_wifis()
 
 #sun2plug.local
 print(f"Solmate WIFI: {solclient.serialnum}: {wifis}")
