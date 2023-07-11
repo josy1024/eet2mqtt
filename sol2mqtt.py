@@ -139,6 +139,10 @@ while True:
         try:
             mqttClient.reconnect()
             connected = True
+            print("reconnect: topics..")
+            for topic in subscribe_topics:
+                print("  Subscribe: " + topic)
+                mqttClient.subscribe(topic)
         except:
             time.sleep(2)
     try:
