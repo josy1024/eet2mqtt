@@ -128,6 +128,7 @@ except Exception as exc:
 n = sdnotify.SystemdNotifier()
 n.notify("READY=1")
 
+reconnectcounter = 0
 # Create a thread for processing the messages from the queue
 # message_thread = threading.Thread(target=process_messages)
 # message_thread.start()
@@ -139,6 +140,7 @@ while True:
         try:
             mqttClient.reconnect()
             connected = True
+            reconnectcounter += 1
             print("reconnect: topics..")
             for topic in subscribe_topics:
                 print("  Subscribe: " + topic)
@@ -165,6 +167,7 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/battery_out", battery_out, 1)                
 
         injectsettings = solclient.get_injection_settings()
+
         # injectsettings_string = json.dumps(injectsettings)
         # mqttClient.publish(f"eet/solmate/{mqttid}/injectsettings ", injectsettings_string , 1)                
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_injection", injectsettings['user_minimum_injection'] , 1)          
@@ -174,11 +177,14 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime)
         current_timestamp = datetime.now(timezone.utc).isoformat()
         mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp)
+        mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter))
+        
         
         n.notify("WATCHDOG=1")
     except Exception as exc:
         print("Exception:", type(exc).__name__)
         print(str(exc))
-    sleep(10)
+        mqttClient.publish(f"eet/solmate/{mqttid}/Exception", str(exc))
     mqttClient.loop(0.1)
+    sleep(20)
     
