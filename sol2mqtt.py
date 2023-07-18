@@ -149,10 +149,12 @@ while True:
             time.sleep(2)
     try:
         live_values = solclient.get_live_values()
+        current_timestamp = datetime.now(timezone.utc).isoformat()
 
         while not message_queue.empty():
             topic, received_message = message_queue.get()  # queue2sol: Retrieve variables from the queue
             mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
+            mqttClient.publish(f"eet/solmate/{mqttid}/last_{topic}", f"{current_timestamp} {received_message}", 1)
             sleep(0.1)
 
         online = solclient.check_online()
@@ -175,7 +177,6 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
         mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime)
-        current_timestamp = datetime.now(timezone.utc).isoformat()
         mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp)
         mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter))
         
