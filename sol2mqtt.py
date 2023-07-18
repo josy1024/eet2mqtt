@@ -186,5 +186,5 @@ while True:
         print(str(exc))
         mqttClient.publish(f"eet/solmate/{mqttid}/Exception", str(exc))
     sleep(20)
-    mqttClient.loop(0.1)
+    #mqttClient.loop(0.1)
     
