@@ -138,6 +138,7 @@ while True:
     connected = False
     while not connected:
         try:
+            print("reconnect:")
             mqttClient.reconnect()
             connected = True
             reconnectcounter += 1
@@ -146,10 +147,19 @@ while True:
                 print("  Subscribe: " + topic)
                 mqttClient.subscribe(topic)
         except:
+            print("except reconnect: topics sleep")
             time.sleep(2)
     try:
-        live_values = solclient.get_live_values()
         current_timestamp = datetime.now(timezone.utc).isoformat()
+        mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime)
+        mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp)
+        mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter))
+
+        print("solclient.get_live_values...")
+
+        live_values = solclient.get_live_values()
+        for property_name in live_values.keys():
+            mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", live_values[property_name], 1)                
 
         while not message_queue.empty():
             topic, received_message = message_queue.get()  # queue2sol: Retrieve variables from the queue
@@ -160,8 +170,6 @@ while True:
         online = solclient.check_online()
         # mqttClient.publish(f"eet/solmate/{client.serialnum}/live_values", json.dumps(live_values), 1)
         mqttClient.publish(f"eet/solmate/{mqttid}/online", online, 1)
-        for property_name in live_values.keys():
-            mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", live_values[property_name], 1)                
         
         battery_in = max(float(live_values['battery_flow']),0)
         battery_out = - min(float(live_values['battery_flow']),0)
@@ -176,12 +184,8 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/user_maximum_injection", injectsettings['user_maximum_injection'] , 1)          
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
-        mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime)
-        mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp)
-        mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter))
-        
-        
         n.notify("WATCHDOG=1")
+        
     except Exception as exc:
         print("Exception:", type(exc).__name__)
         print(str(exc))
