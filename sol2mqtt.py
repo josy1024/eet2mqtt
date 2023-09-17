@@ -161,7 +161,7 @@ while True:
         for property_name in live_values.keys():
             sleep(0.1)
             mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", live_values[property_name], 1)                
-            print("published:" property_name + ": " + live_values[property_name])
+            print("published:" + property_name + ": " + live_values[property_name])
 
         while not message_queue.empty():
             topic, received_message = message_queue.get()  # queue2sol: Retrieve variables from the queue
