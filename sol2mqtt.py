@@ -155,7 +155,8 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp)
         mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter))
 
-        print("solclient.get_live_values... "  + str(reconnectcounter))
+        print("solclient.get_live_values... ")
+        print (str(reconnectcounter))
 
         live_values = solclient.get_live_values()
         for property_name in live_values.keys():
@@ -194,6 +195,7 @@ while True:
     except Exception as exc:
         print("Exception:", type(exc).__name__)
         print(str(exc))
+        print(traceback.format_exc())
         mqttClient.publish(f"eet/solmate/{mqttid}/Exception", str(exc))
     sleep(20)
     #mqttClient.loop(0.1)
