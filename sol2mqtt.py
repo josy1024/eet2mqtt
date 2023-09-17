@@ -198,6 +198,7 @@ while True:
         print(str(exc))
         print(traceback.format_exc())
         mqttClient.publish(f"eet/solmate/{mqttid}/Exception", str(exc))
+        mqttClient.publish(f"eet/solmate/{mqttid}/Traceback", traceback.format_exc())
     sleep(20)
     #mqttClient.loop(0.1)
     
