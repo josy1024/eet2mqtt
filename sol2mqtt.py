@@ -190,7 +190,7 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/user_maximum_injection", injectsettings['user_maximum_injection'] , 1)          
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
-        print("injectsettings['user_minimum_injection'] = " + injectsettings['user_minimum_injection'])
+        print("injectsettings['user_minimum_injection'] = " + str(injectsettings['user_minimum_injection']))
         n.notify("WATCHDOG=1")
         
     except Exception as exc:
