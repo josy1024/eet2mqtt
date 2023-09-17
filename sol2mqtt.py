@@ -11,6 +11,7 @@ import json
 import queue
 from datetime import datetime
 from datetime import timezone
+import traceback
 
 # * gets solmate api life data (sol2mqtt)
 # *   .. and writes them to mqtt
