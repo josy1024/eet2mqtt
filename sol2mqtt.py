@@ -213,14 +213,13 @@ while True:
 
     pv_power = max(float(live_values['pv_power']),0)
     sleeptimer = 25
-    if (pv_power <= 0.1) {
+    if pv_power <= 0.1:
         sleeptimer = 55
         n.notify("WATCHDOG=1")
         print(".sleep." + str(sleeptimer))
         sleep(sleeptimer)
         n.notify("WATCHDOG=1")
         print(".sleep." + str(sleeptimer))
-    }
     sleep(sleeptimer)
     mqttClient.disconnect()
     
