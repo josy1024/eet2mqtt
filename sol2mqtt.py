@@ -165,7 +165,7 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter), 1, retain=True)
 
         print("solclient.get_live_values... ")
-        print (str(reconnectcounter))
+        print(str(reconnectcounter))
 
         live_values = solclient.get_live_values()
         for property_name in live_values.keys():
@@ -196,9 +196,11 @@ while True:
         # mqttClient.publish(f"eet/solmate/{mqttid}/injectsettings ", injectsettings_string , 1)                
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_injection", injectsettings['user_minimum_injection'] , 1)          
         mqttClient.publish(f"eet/solmate/{mqttid}/user_maximum_injection", injectsettings['user_maximum_injection'] , 1)          
-        mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
+        ret = mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
+        
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
         print("injectsettings['user_minimum_injection'] = " + str(injectsettings['user_minimum_injection']))
+        print("mqttpublish user_minimum_injection: ret=" + ret)
         n.notify("WATCHDOG=1")
         
     except Exception as exc:
@@ -209,7 +211,17 @@ while True:
         mqttClient.publish(f"eet/solmate/Ex/Traceback", traceback.format_exc(), 1, retain=True)
         mqttClient.publish(f"eet/solmate/Ex/reconnectcounter", str(reconnectcounter), 1, retain=True)
 
-
-    sleep(25)
+    pv_power = max(float(live_values['pv_power']),0)
+    sleeptimer = 25
+    if (pv_power <= 0.1)
+    {
+        sleeptimer = 55
+        n.notify("WATCHDOG=1")
+        print(".sleep." + str(sleeptimer))
+        sleep(sleeptimer)
+        n.notify("WATCHDOG=1")
+        print(".sleep." + str(sleeptimer))
+    }
+    sleep(sleeptimer)
     mqttClient.disconnect()
     
