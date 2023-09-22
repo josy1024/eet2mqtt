@@ -95,7 +95,7 @@ def on_connect(mqttClient, userdata, flags, rc):
         mqttClient.connect(broker_address, broker_port)
 
 def on_disconnect(mqttClient, userdata, rc):
-   print("client disconnected ok" + rc)
+   print("client disconnected ok" + str(rc))
                 
 def on_message(mqttClient, userdata, msg):
     received_message = msg.payload.decode("utf-8")
@@ -159,13 +159,12 @@ while True:
         current_timestamp = datetime.now(timezone.utc).isoformat()
         ret = mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime, 1, retain=True)
         result, mid = ret
-        print("mqttpublish uptime: ret=" + str(result))
-        
+        print("LOOP: mqttpublish uptime: " + str(uptime) + " ret=" + str(result))
+        print(str(reconnectcounter))
+
         mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp, 1, retain=True)
         mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter), 1, retain=True)
-
         print("solclient.get_live_values... ")
-        print(str(reconnectcounter))
 
         live_values = solclient.get_live_values()
         for property_name in live_values.keys():
