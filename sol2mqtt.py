@@ -158,8 +158,8 @@ while True:
     try:
         current_timestamp = datetime.now(timezone.utc).isoformat()
         ret = mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime, 1, retain=True)
-        
-        print("mqttpublish uptime: ret=" + ret)
+        result, mid = ret
+        print("mqttpublish uptime: ret=" + str(result))
         
         mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp, 1, retain=True)
         mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter), 1, retain=True)
@@ -197,10 +197,11 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_injection", injectsettings['user_minimum_injection'] , 1)          
         mqttClient.publish(f"eet/solmate/{mqttid}/user_maximum_injection", injectsettings['user_maximum_injection'] , 1)          
         ret = mqttClient.publish(f"eet/solmate/{mqttid}/user_minimum_battery_percentage", injectsettings['user_minimum_battery_percentage'] , 1)          
+        result, mid = ret
         
         #{"user_minimum_injection": 50, "user_maximum_injection": 196, "user_minimum_battery_percentage": 5}
         print("injectsettings['user_minimum_injection'] = " + str(injectsettings['user_minimum_injection']))
-        print("mqttpublish user_minimum_injection: ret=" + ret)
+        print("mqttpublish user_minimum_injection: ret=" + str(result))
         n.notify("WATCHDOG=1")
         
     except Exception as exc:
