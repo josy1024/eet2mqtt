@@ -166,11 +166,21 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter), 1, retain=True)
         print("solclient.get_live_values... ")
 
-        live_values = solclient.get_live_values()
+        try:
+            live_values = solclient.get_live_values()
+        except Exception as exc:
+            print("Exception:", type(exc).__name__)
+            print(str(exc))
+            print(traceback.format_exc())
+            solclient.quickstart()
+            live_values = solclient.get_live_values()
+            
         for property_name in live_values.keys():
             sleep(0.1)
             mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", str(live_values[property_name]), 1)                
             print("published:" + property_name + ": " + str(live_values[property_name]))
+            # received 1011 (unexpected error) keepalive ping timeout; then sent 1011 (unexpected error) keepalive ping timeout
+            # Traceback (most recent call last):
 
         while not message_queue.empty():
             topic, received_message = message_queue.get()  # queue2sol: Retrieve variables from the queue
@@ -202,7 +212,18 @@ while True:
         print("injectsettings['user_minimum_injection'] = " + str(injectsettings['user_minimum_injection']))
         print("mqttpublish user_minimum_injection: ret=" + str(result))
         n.notify("WATCHDOG=1")
-        
+        pv_power = max(float(live_values['pv_power']),0)
+        sleeptimer = 12
+        if pv_power <= 0.1:
+            sleeptimer = 55
+            n.notify("WATCHDOG=1")
+            print(".sleep." + str(sleeptimer))
+            sleep(sleeptimer)
+            n.notify("WATCHDOG=1")
+            print(".sleep." + str(sleeptimer))
+        sleep(sleeptimer)
+        mqttClient.disconnect()        
+
     except Exception as exc:
         print("Exception:", type(exc).__name__)
         print(str(exc))
@@ -210,16 +231,3 @@ while True:
         mqttClient.publish(f"eet/solmate/Ex/Exception", str(exc), 1, retain=True)
         mqttClient.publish(f"eet/solmate/Ex/Traceback", traceback.format_exc(), 1, retain=True)
         mqttClient.publish(f"eet/solmate/Ex/reconnectcounter", str(reconnectcounter), 1, retain=True)
-
-    pv_power = max(float(live_values['pv_power']),0)
-    sleeptimer = 25
-    if pv_power <= 0.1:
-        sleeptimer = 55
-        n.notify("WATCHDOG=1")
-        print(".sleep." + str(sleeptimer))
-        sleep(sleeptimer)
-        n.notify("WATCHDOG=1")
-        print(".sleep." + str(sleeptimer))
-    sleep(sleeptimer)
-    mqttClient.disconnect()
-    
