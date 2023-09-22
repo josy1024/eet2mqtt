@@ -169,7 +169,7 @@ while True:
         try:
             live_values = solclient.get_live_values()
         except Exception as exc:
-            print("Exception:", type(exc).__name__)
+            print("SOLCLIENT Exception:", type(exc).__name__)
             print(str(exc))
             print(traceback.format_exc())
             solclient.quickstart()
