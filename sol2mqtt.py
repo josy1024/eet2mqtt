@@ -69,7 +69,7 @@ solclient = solmate_sdk.SolMateAPIClient(sn)
 #solclient.uri = "ws://sun2plug.local:9124/"
 
 solclient.quickstart()
-mqttid = solclient.serialnum
+#mqttid = solclient.serialnum
 mqttid = "0"
 
 #wifis = solclient.list_wifis()
@@ -93,6 +93,9 @@ def on_connect(mqttClient, userdata, flags, rc):
         print("Connection to MQTT broker failed. Retrying in 5 seconds...")
         time.sleep(5)
         mqttClient.connect(broker_address, broker_port)
+
+def on_disconnect(mqttClient, userdata, rc):
+   print("client disconnected ok" + rc)
                 
 def on_message(mqttClient, userdata, msg):
     received_message = msg.payload.decode("utf-8")
@@ -114,6 +117,8 @@ try:
     mqttClient = mqtt.Client("sol2mqtt")
     mqttClient.on_connect = on_connect
     mqttClient.on_message = on_message
+    mqttClient.on_disconnect = on_disconnect
+
     mqttClient.username_pw_set(mqttuser, mqttpasswort)
     mqttClient.connect(mqttBroker, mqttport, 60)
     mqttClient.loop_start()
@@ -152,9 +157,12 @@ while True:
             time.sleep(2)
     try:
         current_timestamp = datetime.now(timezone.utc).isoformat()
-        mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime)
-        mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp)
-        mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter))
+        ret = mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime, 1, retain=True)
+        
+        print("mqttpublish uptime: ret=" + ret)
+        
+        mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp, 1, retain=True)
+        mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter), 1, retain=True)
 
         print("solclient.get_live_values... ")
         print (str(reconnectcounter))
@@ -162,7 +170,7 @@ while True:
         live_values = solclient.get_live_values()
         for property_name in live_values.keys():
             sleep(0.1)
-            mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", live_values[property_name], 1)                
+            mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", str(live_values[property_name]), 1)                
             print("published:" + property_name + ": " + str(live_values[property_name]))
 
         while not message_queue.empty():
@@ -197,8 +205,11 @@ while True:
         print("Exception:", type(exc).__name__)
         print(str(exc))
         print(traceback.format_exc())
-        mqttClient.publish(f"eet/solmate/{mqttid}/Exception", str(exc))
-        mqttClient.publish(f"eet/solmate/{mqttid}/Traceback", traceback.format_exc())
-    sleep(20)
-    #mqttClient.loop(0.1)
+        mqttClient.publish(f"eet/solmate/Ex/Exception", str(exc), 1, retain=True)
+        mqttClient.publish(f"eet/solmate/Ex/Traceback", traceback.format_exc(), 1, retain=True)
+        mqttClient.publish(f"eet/solmate/Ex/reconnectcounter", str(reconnectcounter), 1, retain=True)
+
+
+    sleep(25)
+    mqttClient.disconnect()
     
