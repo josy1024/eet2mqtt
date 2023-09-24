@@ -135,6 +135,7 @@ n = sdnotify.SystemdNotifier()
 n.notify("READY=1")
 
 reconnectcounter = 0
+solreconnectcounter = 0
 # Create a thread for processing the messages from the queue
 # message_thread = threading.Thread(target=process_messages)
 # message_thread.start()
@@ -144,11 +145,11 @@ while True:
     connected = False
     while not connected:
         try:
-            print("reconnect:")
+            print("mqtt reconnect:")
             mqttClient.reconnect()
             connected = True
             reconnectcounter += 1
-            print("reconnect: topics..")
+            print("mqtt reconnect: topics... " + str(reconnectcounter))
             for topic in subscribe_topics:
                 print("  Subscribe: " + topic)
                 mqttClient.subscribe(topic)
@@ -166,15 +167,18 @@ while True:
         mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter), 1, retain=True)
         print("solclient.get_live_values... ")
 
-        try:
-            live_values = solclient.get_live_values()
-        except Exception as exc:
-            print("SOLCLIENT Exception:", type(exc).__name__)
-            #print(str(exc))
-            #print(traceback.format_exc())
-            solclient.quickstart()
-            live_values = solclient.get_live_values()
-            
+        connected = False
+        while not connected:
+            try:
+                print("sol reconnect... " + str(solreconnectcounter))
+                solclient.quickstart()
+                live_values = solclient.get_live_values()
+                connected = True
+                solreconnectcounter += 1
+            except:
+                print("sol reconnect: sleep")
+                time.sleep(10)
+                 
         for property_name in live_values.keys():
             sleep(0.1)
             mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", str(live_values[property_name]), 1)                
@@ -215,7 +219,7 @@ while True:
         pv_power = max(float(live_values['pv_power']),0)
         sleeptimer = 12
         if pv_power <= 0.1:
-            sleeptimer = 55
+            sleeptimer = 24
             n.notify("WATCHDOG=1")
             print(".sleep." + str(sleeptimer))
             sleep(sleeptimer)
@@ -231,3 +235,5 @@ while True:
         mqttClient.publish(f"eet/solmate/Ex/Exception", str(exc), 1, retain=True)
         mqttClient.publish(f"eet/solmate/Ex/Traceback", traceback.format_exc(), 1, retain=True)
         mqttClient.publish(f"eet/solmate/Ex/reconnectcounter", str(reconnectcounter), 1, retain=True)
+        mqttClient.publish(f"eet/solmate/Ex/uptime" + str(uptime) 1, retain=True)
+        mqttClient.publish(f"eet/solmate/Ex/current_timestamp" + str(current_timestamp) 1, retain=True)
