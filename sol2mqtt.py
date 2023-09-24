@@ -178,6 +178,7 @@ while True:
             except:
                 print("sol reconnect: sleep")
                 time.sleep(10)
+        mqttClient.publish(f"eet/solmate/{mqttid}/solreconnectcounter", str(solreconnectcounter), 1, retain=True)
                  
         for property_name in live_values.keys():
             sleep(0.1)
