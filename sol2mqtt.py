@@ -226,7 +226,7 @@ while True:
             n.notify("WATCHDOG=1")
             print(".sleep." + str(sleeptimer))
         sleep(sleeptimer)
-        mqttClient.disconnect()        
+        #mqttClient.disconnect()        
 
     except Exception as exc:
         print("Exception:", type(exc).__name__)
