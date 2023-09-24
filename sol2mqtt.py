@@ -95,7 +95,7 @@ def on_connect(mqttClient, userdata, flags, rc):
         mqttClient.connect(broker_address, broker_port)
 
 def on_disconnect(mqttClient, userdata, rc):
-   print("client disconnected ok" + str(rc))
+   print("client disconnected ok: rc=" + str(rc))
                 
 def on_message(mqttClient, userdata, msg):
     received_message = msg.payload.decode("utf-8")
