@@ -235,5 +235,5 @@ while True:
         mqttClient.publish(f"eet/solmate/Ex/Exception", str(exc), 1, retain=True)
         mqttClient.publish(f"eet/solmate/Ex/Traceback", traceback.format_exc(), 1, retain=True)
         mqttClient.publish(f"eet/solmate/Ex/reconnectcounter", str(reconnectcounter), 1, retain=True)
-        mqttClient.publish(f"eet/solmate/Ex/uptime" + str(uptime) 1, retain=True)
-        mqttClient.publish(f"eet/solmate/Ex/current_timestamp" + str(current_timestamp) 1, retain=True)
+        mqttClient.publish(f"eet/solmate/Ex/uptime" + str(uptime), 1, retain=True)
+        mqttClient.publish(f"eet/solmate/Ex/current_timestamp" + str(current_timestamp), 1, retain=True)
