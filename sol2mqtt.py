@@ -181,7 +181,10 @@ while True:
                 sleep(10)
                 
         mqttClient.publish(f"eet/solmate/{mqttid}/solreconnectcounter", str(solreconnectcounter), 1, retain=True)
-                 
+
+        if datetime.now().hour == 11:
+            solclient.set_min_battery_percentage(15)
+             
         for property_name in live_values.keys():
             sleep(0.1)
             mqttClient.publish(f"eet/solmate/{mqttid}/{property_name}", str(live_values[property_name]), 1)                
