@@ -224,7 +224,7 @@ while True:
         print("mqttpublish user_minimum_injection: ret=" + str(result))
         n.notify("WATCHDOG=1")
         pv_power = max(float(live_values['pv_power']),0)
-        sleeptimer = 12
+        sleeptimer = 6
         if pv_power <= 0.1:
             sleeptimer = 24
             n.notify("WATCHDOG=1")
