@@ -223,9 +223,10 @@ while True:
         print("injectsettings['user_minimum_injection'] = " + str(injectsettings['user_minimum_injection']))
         print("mqttpublish user_minimum_injection: ret=" + str(result))
         n.notify("WATCHDOG=1")
-        pv_power = max(float(live_values['pv_power']),0)
+        battery_state = max(float(live_values['battery_state']),0)
+        
         sleeptimer = 6
-        if pv_power <= 0.1:
+        if battery_state <= 0.1:
             sleeptimer = 24
             n.notify("WATCHDOG=1")
             print(".sleep." + str(sleeptimer))
