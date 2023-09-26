@@ -190,6 +190,7 @@ while True:
 
         while not message_queue.empty():
             topic, received_message = message_queue.get()  # queue2sol: Retrieve variables from the queue
+            received_message = math.ceil(received_message)
             mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
             mqttClient.publish(f"eet/last_{topic}", f"{current_timestamp} {received_message}", 1)
             sleep(0.1)
