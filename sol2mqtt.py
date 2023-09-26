@@ -105,7 +105,7 @@ def on_message(mqttClient, userdata, msg):
 
 
 def mqtt2sol(topic, received_message):
-    print(f"mqtt2sol: Received message on topic {topic}: {received_message}")
+    print(f"mqtt2sol: Received message on topic solclient.set {topic}: {received_message}")
     if "user_maximum_injection" in topic:
         solclient.set_max_injection(int(received_message))
     elif "user_minimum_injection" in topic:
@@ -194,9 +194,9 @@ while True:
 
         while not message_queue.empty():
             topic, received_message = message_queue.get()  # queue2sol: Retrieve variables from the queue
-            received_message = math.ceil(float(received_message))
-            mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
             mqttClient.publish(f"eet/last_{topic}", f"{current_timestamp} {received_message}", 1)
+            received_message = int(math.ceil(float(received_message)))
+            mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
             sleep(0.1)
 
         online = solclient.check_online()
