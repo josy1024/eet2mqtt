@@ -156,7 +156,7 @@ while True:
                 mqttClient.subscribe(topic)
         except:
             print("except reconnect: topics sleep")
-            time.sleep(2)
+            sleep(2)
     try:
         current_timestamp = datetime.now(timezone.utc).isoformat()
         ret = mqttClient.publish(f"eet/solmate/{mqttid}/uptime", uptime, 1, retain=True)
