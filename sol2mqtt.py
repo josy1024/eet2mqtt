@@ -182,8 +182,8 @@ while True:
                 
         mqttClient.publish(f"eet/solmate/{mqttid}/solreconnectcounter", str(solreconnectcounter), 1, retain=True)
 
-        if datetime.now().hour == 10:
-            solclient.set_min_battery_percentage(15)
+        # if datetime.now().hour == 10:
+        #     solclient.set_min_battery_percentage(15)
              
         for property_name in live_values.keys():
             sleep(0.1)
@@ -195,9 +195,17 @@ while True:
         while not message_queue.empty():
             topic, received_message = message_queue.get()  # queue2sol: Retrieve variables from the queue
             mqttClient.publish(f"eet/last_{topic}", f"{current_timestamp} {received_message}", 1)
-            received_message = int(math.ceil(float(received_message)))
-            mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
-            sleep(0.1)
+            try:
+                received_message = int(math.ceil(float(received_message)))
+                mqtt2sol(topic, received_message)  # Call mqtt2sol with the retrieved variables
+                sleep(0.1)
+            except Exception as exc:
+                print("Exception: queue2sol", type(exc).__name__)
+                print(str(exc))
+                print(traceback.format_exc())
+                mqttClient.publish(f"eet/solmate/Ex/Exqueue2sol", str(exc), 1, retain=True)
+                mqttClient.publish(f"eet/solmate/Ex/Exqueue2solReceivedMessage", str(received_message), 1, retain=True)
+                
 
         online = solclient.check_online()
         # mqttClient.publish(f"eet/solmate/{client.serialnum}/live_values", json.dumps(live_values), 1)
