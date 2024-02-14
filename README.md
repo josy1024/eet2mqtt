@@ -1,23 +1,20 @@
 # eet2mqtt
-runnging solmate 2 mqtt as service
+how to run  solmate 2 mqtt as a service
 
-
-## service example:
-
-## operate
-
+## operate eet.service
+```bash
 sudo systemctl daemon-reload
 sudo systemctl restart eet.service
 sudo systemctl stop eet.service
 sudo systemctl start eet.service
 sudo systemctl status eet.service -n 100
+```
 
-
-## edit
+## edit service config
 
 sudo vi "/etc/systemd/system/eet.service"
 
-## eet.service
+### eet.service
 ```bash
 [Unit]
 Description=eet Script
