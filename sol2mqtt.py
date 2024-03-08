@@ -198,7 +198,7 @@ while True:
                     sleeploop = 24
                 print("sol reconnect: sleep " + str(sleeploop))
                 mqttClient.publish(f"eet/solmate/{mqttid}/availability", "offline", 1, retain=True)
-                if solreconnectcounter > 10
+                if solreconnectcounter > 10:
                     n.notify("WATCHDOG=1")
                     for i in range(10):
                         sleep(sleeploop)
