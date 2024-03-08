@@ -59,7 +59,7 @@ soluri = config['soluri']
 
 uptime = datetime.now(timezone.utc).isoformat()
 wifis = ""
-print("Connect SolmateAPI SN:" + sn)
+print("Connect SolmateAPI SN:" + sn + " " + soluri)
 
 # 
 
