@@ -1,6 +1,6 @@
 # in configuration.yaml:
-# mqtt: !include sol.yaml
-# in sol.yaml inhalt:
+# mqtt: !include mqtt.yaml
+# in mqtt.yaml inhalt:
 sensor:
   - name: "SolMateInjectPower"
     unique_id: "solinjectpower"
@@ -9,6 +9,7 @@ sensor:
     unit_of_measurement: "W"
     device_class: "power"
     state_class: "measurement"
+    expire_after: 600
   - name: "SolMateTemperature"
     unique_id: "soltemp"
     state_topic: "eet/solmate/0/temperature"
@@ -31,6 +32,7 @@ sensor:
     unit_of_measurement: "W"
     device_class: "power"
     state_class: "measurement"
+    expire_after: 600
   - name: "SolBattery_flow"
     unique_id: "solbatteryflow"
     state_topic: "eet/solmate/0/battery_flow"
@@ -38,6 +40,7 @@ sensor:
     unit_of_measurement: "W"
     device_class: "power"
     state_class: "measurement"
+    expire_after: 600
   - name: "SolBattery_Laden"
     unique_id: "solbatteryin"
     state_topic: "eet/solmate/0/battery_in"
@@ -45,6 +48,7 @@ sensor:
     unit_of_measurement: "W"
     device_class: "power"
     state_class: "measurement"
+    expire_after: 600
   - name: "SolBattery_Liefern"
     unique_id: "solbatteryout"
     state_topic: "eet/solmate/0/battery_out"
@@ -52,6 +56,7 @@ sensor:
     unit_of_measurement: "W"
     device_class: "power"
     state_class: "measurement"
+    expire_after: 600
   - name: "SolSettings_user_minimum_injection"
     unique_id: "solsetmininjection"
     state_topic: "eet/solmate/0/user_minimum_injection"
@@ -77,7 +82,3 @@ sensor:
     unique_id: "solapiuptime"
     state_topic: "eet/solmate/0/uptime"
     device_class: timestamp
-  # - name: "SolApiLastSeen"
-  #   unique_id: "solapilastseen"
-  #   state_topic: "eet/solmate/0/last_seen"
-  #   device_class: timestamp

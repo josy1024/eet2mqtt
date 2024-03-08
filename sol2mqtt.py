@@ -60,14 +60,17 @@ uptime = datetime.now(timezone.utc).isoformat()
 wifis = ""
 print("Connect SolmateAPI SN:" + sn)
 
-solclient = solmate_sdk.SolMateAPIClient(sn)
+# solclient = solmate_sdk.SolMateAPIClient(sn)
 
 #bugfix if you want to change SolMateAPIClient to LocalSolMateAPIClient
 # ~/.config/solmate-sdk
 # mv authstore.json authstore-online.json
 
-#solclient = solmate_sdk.LocalSolMateAPIClient(sn)
-#solclient.uri = "ws://sun2plug.local:9124/"
+n = sdnotify.SystemdNotifier()
+n.notify("READY=1")
+
+solclient = solmate_sdk.LocalSolMateAPIClient(sn)
+solclient.uri = "ws://192.168.25.19:9124/"
 
 solclient.quickstart()
 #mqttid = solclient.serialnum
@@ -113,6 +116,7 @@ def mqtt2sol(topic, received_message):
     elif "user_minimum_battery_percentage" in topic:
         solclient.set_min_battery_percentage(int(received_message))
 
+
 try:
     print("Connect mqtt: " + mqttBroker + ":" + str(mqttport) )
     mqttClient = mqtt.Client("sol2mqtt")
@@ -131,9 +135,6 @@ except Exception as exc:
     sys.exit()
 
 
-
-n = sdnotify.SystemdNotifier()
-n.notify("READY=1")
 
 reconnectcounter = 0
 solreconnectcounter = 0
