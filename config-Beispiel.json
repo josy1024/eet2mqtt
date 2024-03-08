@@ -3,5 +3,6 @@
     "mqttbrokerip": "192.168.0.100",
     "mqttbrokerport": 1883,
     "mqttbrokeruser": "",
-    "mqttbrokerpasswort": ""
+    "mqttbrokerpasswort": "",
+    "soluri": "ws://192.168.25.19:9124/"
 }

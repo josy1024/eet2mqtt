@@ -55,12 +55,13 @@ mqttBroker = config['mqttbrokerip']
 mqttport = config['mqttbrokerport']  # 1883 ist der Standard Port
 mqttuser = config['mqttbrokeruser']
 mqttpasswort = config['mqttbrokerpasswort']
+soluri = config['soluri']
 
 uptime = datetime.now(timezone.utc).isoformat()
 wifis = ""
 print("Connect SolmateAPI SN:" + sn)
 
-# solclient = solmate_sdk.SolMateAPIClient(sn)
+# 
 
 #bugfix if you want to change SolMateAPIClient to LocalSolMateAPIClient
 # ~/.config/solmate-sdk
@@ -68,10 +69,12 @@ print("Connect SolmateAPI SN:" + sn)
 
 n = sdnotify.SystemdNotifier()
 n.notify("READY=1")
-
-solclient = solmate_sdk.LocalSolMateAPIClient(sn)
-solclient.uri = "ws://192.168.25.19:9124/"
-
+if not soluri:
+    solclient = solmate_sdk.SolMateAPIClient(sn)
+else:
+    solclient = solmate_sdk.LocalSolMateAPIClient(sn)
+    solclient.uri = soluri
+    
 solclient.quickstart()
 #mqttid = solclient.serialnum
 mqttid = "0"
