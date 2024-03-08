@@ -79,7 +79,7 @@ try:
     solclient.quickstart()
 
 except Exception as exc:
-    print("Solmate OFFLINE" + sn + ":" +  str(soluri) )
+    print("Solmate OFFLINE: " + sn + ":" +  str(soluri) )
     print("Exception:", type(exc).__name__)
     print(str(exc))
     #sys.exit()
