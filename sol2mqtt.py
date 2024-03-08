@@ -193,10 +193,10 @@ while True:
                 mqttClient.publish(f"eet/solmate/{mqttid}/availability", "online", 1)
                 solreconnectcounter = 0
             except:
+                solreconnectcounter += 1
                 if solreconnectcounter > 10:
                     sleeploop = 300
                 print("sol reconnect: sleep " + str(sleeploop))
-                solreconnectcounter += 1
                 mqttClient.publish(f"eet/solmate/{mqttid}/availability", "offline", 1, retain=True)
                 sleep(sleeploop)
                 
