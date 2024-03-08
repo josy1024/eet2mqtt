@@ -69,13 +69,22 @@ print("Connect SolmateAPI SN:" + sn)
 
 n = sdnotify.SystemdNotifier()
 n.notify("READY=1")
-if not soluri:
-    solclient = solmate_sdk.SolMateAPIClient(sn)
-else:
-    solclient = solmate_sdk.LocalSolMateAPIClient(sn)
-    solclient.uri = soluri
+
+try:
+    if not soluri:
+        solclient = solmate_sdk.SolMateAPIClient(sn)
+    else:
+        solclient = solmate_sdk.LocalSolMateAPIClient(sn)
+        solclient.uri = soluri
+    solclient.quickstart()
+
+except Exception as exc:
+    print("Solmate OFFLINE" + sn + ":" +  str(soluri) )
+    print("Exception:", type(exc).__name__)
+    print(str(exc))
+    #sys.exit()
     
-solclient.quickstart()
+    
 #mqttid = solclient.serialnum
 mqttid = "0"
 
@@ -180,8 +189,10 @@ while True:
                 live_values = solclient.get_live_values()
                 connected = True
                 solreconnectcounter += 1
+                mqttClient.publish(f"eet/solmate/{mqttid}/state", "online", 1)
             except:
                 print("sol reconnect: sleep")
+                mqttClient.publish(f"eet/solmate/{mqttid}/state", "offline", 1, retain=True)
                 sleep(10)
                 
         mqttClient.publish(f"eet/solmate/{mqttid}/solreconnectcounter", str(solreconnectcounter), 1, retain=True)
