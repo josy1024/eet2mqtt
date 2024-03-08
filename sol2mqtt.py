@@ -203,7 +203,7 @@ while True:
                     for i in range(10):
                         sleep(sleeploop)
                         n.notify("WATCHDOG=1")
-                else
+                else:
                     sleep(sleeploop)
                 
 
