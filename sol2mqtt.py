@@ -190,12 +190,12 @@ while True:
                 solclient.quickstart()
                 live_values = solclient.get_live_values()
                 connected = True
-                mqttClient.publish(f"eet/solmate/{mqttid}/state", "online", 1)
+                mqttClient.publish(f"eet/solmate/{mqttid}/availability", "online", 1)
                 solreconnectcounter = 0
             except:
                 print("sol reconnect: sleep " + str(sleeploop))
                 solreconnectcounter += 1
-                mqttClient.publish(f"eet/solmate/{mqttid}/state", "offline", 1, retain=True)
+                mqttClient.publish(f"eet/solmate/{mqttid}/availability", "offline", 1, retain=True)
                 if solreconnectcounter > 10:
                     sleeploop = 300
                 sleep(sleeploop)
