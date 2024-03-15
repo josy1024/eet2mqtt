@@ -176,7 +176,7 @@ while True:
         result, mid = ret
         print("LOOP: mqttpublish uptime: " + str(uptime) + " ret=" + str(result))
         print(str(reconnectcounter))
-
+        sleep(0.1)
         mqttClient.publish(f"eet/solmate/{mqttid}/last_seen", current_timestamp, 1, retain=True)
         mqttClient.publish(f"eet/solmate/{mqttid}/reconnectcounter", str(reconnectcounter), 1, retain=True)
         print("solclient.get_live_values... ")
@@ -190,6 +190,7 @@ while True:
                 solclient.quickstart()
                 live_values = solclient.get_live_values()
                 connected = True
+                sleep(0.1)
                 mqttClient.publish(f"eet/solmate/{mqttid}/availability", "online", 1)
                 solreconnectcounter = 0
             except:
@@ -243,6 +244,7 @@ while True:
 
         print("Batt: IN " + str(battery_in) + " OUT: " + str(battery_out))
         
+        sleep(0.1)
         injectsettings = solclient.get_injection_settings()
 
         # injectsettings_string = json.dumps(injectsettings)
