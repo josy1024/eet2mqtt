@@ -232,9 +232,9 @@ while True:
                 mqttClient.publish(f"eet/solmate/Ex/Exqueue2solReceivedMessage", str(received_message), 1, retain=True)
                 
 
-        online = solclient.check_online()
-        # mqttClient.publish(f"eet/solmate/{client.serialnum}/live_values", json.dumps(live_values), 1)
-        mqttClient.publish(f"eet/solmate/{mqttid}/online", online, 1)
+        if not soluri:
+            online = solclient.check_online()
+            mqttClient.publish(f"eet/solmate/{mqttid}/online", online, 1)
         
         battery_in = max(float(live_values['battery_flow']),0)
         battery_out = - min(float(live_values['battery_flow']),0)

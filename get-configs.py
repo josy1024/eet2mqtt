@@ -8,6 +8,10 @@ from websockets.exceptions import ConnectionClosedError
 
 client = solmate_sdk.SolMateAPIClient('S1K0506A0000xxxx')
 
+# Local
+#client = solmate_sdk.LocalSolMateAPIClient('S1K0506A0000xxxx')
+#client.uri = "ws://192.168.x.x:9124/"
+
 # client = solmate_sdk.SolMateAPIClient(sn)
 client.quickstart()
 def run_continuously():
