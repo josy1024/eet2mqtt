@@ -231,6 +231,7 @@ while True:
                 print(traceback.format_exc())
                 mqttClient.publish(f"eet/solmate/Ex/Exqueue2sol", str(exc), 1, retain=True)
                 mqttClient.publish(f"eet/solmate/Ex/Exqueue2solReceivedMessage", str(received_message), 1, retain=True)
+                mqttClient.publish(f"eet/solmate/Ex/Exqueue2solReceivedTopic", str(topic), 1, retain=True)
                 
 
         if not soluri:
